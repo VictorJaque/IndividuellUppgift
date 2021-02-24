@@ -23,7 +23,7 @@ public class Wallet {
     //Metoder
     public void deposit(int value,int amt) {
         //Fixa parameter och kod. Loop för att leta, sen ändra
-
+        
         
     }
     
@@ -57,27 +57,27 @@ public class Wallet {
     
     public Money createFives(int amt) {
         Money fives = new Money(5, amt);
-        return fives;
+        wallet.add(fives);
     }
 
     public Money createTens(int amt) {
         Money tens = new Money(10, amt);
-        return tens;
+        wallet.add(tens);
     }
     
     public Money createTwenties(int amt) {
         Money twenties = new Money(20, amt);
-        return twenties;
+        wallet.add(twenties);
     }
     
     public Money createFifties(int amt) {
         Money fifties = new Money(50, amt);
-        return fifties;
+        wallet.add(fifties);
     }
     
     public Money createHundreds(int amt) {
         Money hundreds = new Money(100, amt);
-        return hundreds;
+        wallet.add(hundreds);
     }
     
     
