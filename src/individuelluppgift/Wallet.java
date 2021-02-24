@@ -23,12 +23,47 @@ public class Wallet {
     //Metoder
     public void deposit(int value,int amt) {
         //Fixa parameter och kod. Loop för att leta, sen ändra
-        
+        wallet.forEach(i -> {
+            if (Money i.value == value) 
+                i.amt += amt;
+        });
         
     }
     
-    public withdrawal() {
+    public void withdrawal(int amt) {
+        int amtLeft = amt;
         
+        while (amtLeft > 0) {
+            while (amtLeft > 100) {
+                wallet.forEach(i -> {
+                    if (amtLeft >= 100 && i.value == 100) {
+                        i.amt -= 1;
+                        amtLeft -=100;
+                    }
+                });
+            }
+            wallet.forEach(i -> {
+                if (amtLeft >= 100 && i.value == 100) {
+                    i.amt -= 1;
+                    amtLeft -=100;
+                } else if ((amtLeft >= 50 && amtLeft < 100) && i.value == 50) {
+                    i.amt -= 1;
+                    amtLeft -= 50;
+                } else if ((amtLeft >= 20 && amtLeft < 50) && i.value == 20) {
+                    i.amt -= 1;
+                    amtLeft -=20;
+                } else if ((amtLeft >= 10 && amtLeft < 20) && i.value == 10) {
+                    i.amt -= 1;
+                    amtLeft -= 10;
+                } else if ((amtLeft >= 5 && amtLeft < 10) && i.value == 5) {
+                    i.amt -= 1;
+                    amtLeft -= 5;
+                } else if ((amtLeft >=1 && amtLeft < 5) && i.value == 1) {
+                    i.amt -= 1;
+                    amtLeft -= 1;
+                } 
+            });
+        }
     }
     
     public showBalance() {
@@ -55,27 +90,27 @@ public class Wallet {
         wallet.add(ones);
     }
     
-    public Money createFives(int amt) {
+    public void createFives(int amt) {
         Money fives = new Money(5, amt);
         wallet.add(fives);
     }
 
-    public Money createTens(int amt) {
+    public void createTens(int amt) {
         Money tens = new Money(10, amt);
         wallet.add(tens);
     }
     
-    public Money createTwenties(int amt) {
+    public void createTwenties(int amt) {
         Money twenties = new Money(20, amt);
         wallet.add(twenties);
     }
     
-    public Money createFifties(int amt) {
+    public void createFifties(int amt) {
         Money fifties = new Money(50, amt);
         wallet.add(fifties);
     }
     
-    public Money createHundreds(int amt) {
+    public void createHundreds(int amt) {
         Money hundreds = new Money(100, amt);
         wallet.add(hundreds);
     }
