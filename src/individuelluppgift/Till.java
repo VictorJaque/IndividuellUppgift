@@ -13,10 +13,20 @@ import java.util.ArrayList;
  */
 public class Till {
     //Attribut
-    private ArrayList<Money> till = new ArrayList<>();
+    public int saldo;
     
     //Konstruktor
-    public Wallet() {
-        return till;
+    public Till(int saldo) {
+        this.saldo = saldo;
     }
+    
+    public void deposit(int value) {
+        saldo += value * amt;
+    
+    }
+
+    public void withdrawal(int value) {
+        saldo -= value
+    }
+    
 }
