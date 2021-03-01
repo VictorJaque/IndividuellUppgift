@@ -5,24 +5,25 @@
  */
 package individuelluppgift;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Victor Jaque <victor.jaque.mte21lin@tucsweden.se>
  */
-public class Money {
+abstract class Money {
     //Attribut där jag anger värdet för varje valör samt hur många
-    public int amt = 0;
-    private final int value;
+    public final int value;
+
+    
     
     //Konstruktor
-    public Money(int value, int amt) {
+    public Money(int value) {
         this.value = value;
-        this.amt = amt;
     }
-    
-    //Metoder
 
-   
+    
+    
     
     
 }

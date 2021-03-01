@@ -27,6 +27,7 @@ public class Apple extends Product implements ProductInterface {
 
     @Override
     public void Buy() {
+        System.out.println("The user ");
         
     }
 

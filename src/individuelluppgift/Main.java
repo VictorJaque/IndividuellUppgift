@@ -5,6 +5,10 @@
  */
 package individuelluppgift;
 
+import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
+
 /**
  *
  * @author Victor Jaque <victor.jaque.mte21lin@tucsweden.se>
@@ -16,6 +20,15 @@ public class Main {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        
+        Menu menu = new Menu();
+        
+        menu.fillWallet(10);
+        
+        menu.startMenu();
+        
+  
+    
     }
     
 }
