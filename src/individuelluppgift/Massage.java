@@ -5,28 +5,24 @@
  */
 package individuelluppgift;
 
-
 import java.util.ArrayList;
 
 /**
  *
  * @author Victor Jaque <victor.jaque.mte21lin@tucsweden.se>
  */
-public class Massage extends Product implements ProductInterface{
+public final class Massage extends Product implements ProductInterface {
+    //Attribut
     public ArrayList<String> descriptionString;
     public static ArrayList<String> buyString;
     public static ArrayList<String> useString;
     
     
-    public Massage() {
-    }
-    
-    
-    @Override
-    void Product() {
+    //Konstruktor
+    public Massage() extends Wallet {
         name = "Massage";
+        cost = 100;
         type = "Service";
-        cost = 1000;
         descriptionString = new ArrayList<>(); 
         buyString = new ArrayList<>();
         useString = new ArrayList<>();
@@ -34,13 +30,37 @@ public class Massage extends Product implements ProductInterface{
         Buy();
         Use();
     }
-
+    
+    
+    
     @Override
     public void Description() {
-        descriptionString.add("Have you ever dreamt about a nice hour with an AI?");
-        descriptionString.add("");
+        descriptionString.add("Have you ever dreamt about a nice hour with an AI? ");
+        descriptionString.add(" ");
         descriptionString.add("Well, here I am, i am also quite cheap ;)");
     }
+
+    @Override
+    public void Buy() {
+        buyString.add(" Congratulations to a new experience ");
+        
+    }
+    
+
+    @Override
+    public void Use() {
+        useString.add("LETS GOOOOO!!!!!!");
+        useString.add(" ");
+        useString.add(". ");
+        useString.add(". ");
+        useString.add("Dont expect a happy ending you perv");
+    }
+
+    
+}
+
+
+/*        
 
     @Override
     public void Buy() {
@@ -54,9 +74,4 @@ public class Massage extends Product implements ProductInterface{
         useString.add("");
         useString.add(". ");
         useString.add(". ");
-        useString.add("Dont expect a happy ending you perv");
-    }
-    
-    
-    
-}
+        useString.add("Dont expect a happy ending you perv");*/

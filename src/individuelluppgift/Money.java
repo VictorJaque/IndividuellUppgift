@@ -11,7 +11,7 @@ import java.util.ArrayList;
  *
  * @author Victor Jaque <victor.jaque.mte21lin@tucsweden.se>
  */
-abstract class Money {
+abstract class Money { //Abstract klass för pengar som bara initierar värdet av en peng
     //Attribut där jag anger värdet för varje valör samt hur många
     public final int value;
 

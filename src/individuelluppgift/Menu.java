@@ -5,8 +5,6 @@
  */
 package individuelluppgift;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
@@ -21,33 +19,30 @@ import java.util.concurrent.TimeUnit;
 public class Menu {
     //Attribut för "kiosken". en int variabel för fysisk plånbok, en för kiosk
     //samt en array list för min klass Moneys (derived från Money)
-    private int bankBalance, walletBalance;     //Saldo i kiosken och i plånboken
-    public ArrayList<Moneys> wallet;    //Arraylist för min klass Moneys (derived från Money)
-    public Paron pear;      //Min första produkt
-    public Apple apple;     //Min andra produkt
-    public Wallet walletUser;
+    public static int bankBalance; //Saldo för kiosk
+    public static Paron pear;      //Min första produkt
+    public static Massage massage;     //Min andra produkt
+
     //Konstruktor
     public Menu() {  //När jag initierar objektet vill jag att den ska vara tom på pengar
-        walletUser = new Wallet();
-        walletUser.fillWallet(10);  //fyller på användarens plånbok med 10 av varje valör enligt uppgiftsbeskrivningen
-        wallet = walletUser.wallet;
-        this.walletBalance = walletUser.walletBalance;
         bankBalance = 0;
         pear = new Paron();
-        apple = new Apple();
+        massage = new Massage();
 
     }
     public static void main(String[] args) {
         // TODO code application logic here   
-        Menu menu = new Menu();
-        menu.startMenu();   //Startar användarmenyn
+        Wallet userWallet = new Wallet();
+        userWallet.fillWallet(10);
+        startMenu(userWallet);   //Startar användarmenyn
         
 
     }    
         
         
 
-    public void startMenu() {       // Första sidan av menyn där man kan välja om man vill handla produkter eller sätta in pengar i automaten
+    public static void startMenu(Wallet userWallet) throws InterruptedException {       // Första sidan av menyn där man kan välja om man vill handla produkter eller sätta in pengar i automaten
+        Wallet bankWallet = new Wallet();
         boolean startMenu = true;   //använder en lokal boolean i en while loop som producerar ny text efter varje input från användaren ifall den inte skulle mata in rätt
         Scanner scan = new Scanner(System.in);  //Initierar en scanner för att användaren ska kunna mata in sitt val
         while (startMenu) {
@@ -77,35 +72,36 @@ public class Menu {
                     if (areYouSure) {
                         //Avslutar programmet
                         startMenu = false;
-                        withdrawalBankExit();
+                        withdrawalBankExit(userWallet);
                         break;
                     }
                 case 1:
                     areYouSure = areYouSure();
                     if (areYouSure) {
                         //Öppnar banken
-                        openBank();
+                        openBank(userWallet);
                         break;
                     }
                 case 2:
                     areYouSure = areYouSure();
                     if (areYouSure) {
                         //Öppnar affären
-                        openShop();
+                        openShop(userWallet);
                         break;
                     }
                     
-                default: System.out.println("Enter a valid number");
+                default: tryAgainTxt();
                 }
             }  
         } 
     
-    public void openBank() {  //Startsida för banken. Samma logik här som tidigare
+    public static void openBank(Wallet userWallet) throws InterruptedException {  //Startsida för banken. Samma logik här som tidigar
         boolean waitForInp = true; 
+        Wallet wallet = userWallet;
         while(waitForInp) {
             for (int i = 0; i < 50; ++i) {System.out.println();} 
             System.out.println("|------------------------------------------------------------------------------------|");
-            balanceShow();  // Hämtar en funktion som printar ut saldo.
+            balanceShow(userWallet.bankBalance);  // Hämtar en funktion som printar ut saldo.
             System.out.println("|                  Welcome to Bank of vicJaq1337s next level e-store                 |");
             System.out.println("|                                                                                    |");
             System.out.println("|------------------------------------------------------------------------------------|");
@@ -123,59 +119,53 @@ public class Menu {
             Scanner scan = new Scanner(System.in);
             int menuChoice = scan.nextInt();
             switch(menuChoice) {
-                case 0:
+                case 0 -> {
                     boolean areYouSure = areYouSure();
                     if (areYouSure) {
                         //Avslutar och går tillbaka till startsidan
-                        waitForInp = false;  
-                        }
-                        break;
-                case 1:
-                    //Sätter in pengar 
-                    depositBank();
-                    break;
-                case 2:
-                    //Tar ut pengar
-                    withdrawalBank();
-                    break;
-                case 3:
-                    //Kollar saldot 
-                    checkBalance();
-                    break;
-                default: System.out.println("Enter a valid number");
+                        waitForInp = false;
+                    }
+                }
+                case 1 -> //Sätter in pengar 
+                    wallet.depositBank();
+                case 2 -> //Tar ut pengar
+                    wallet.withdrawalBank();
+                case 3 -> //Kollar saldot 
+                    wallet.checkBalance();
+                default -> tryAgainTxt();
                 }
             }
     } 
     
-    public void openShop() {  //Startsida för affären. Samma logik här som tidigare startsidor
+    public static void openShop(Wallet userWallet) throws InterruptedException {  //Startsida för affären. Samma logik här som tidigare startsidor
         for (int i = 0; i < 50; ++i) {System.out.println();}
-            System.out.println("|------------------------------------------------------------------------------------|");
-            balanceShow();
-            System.out.println("|                      Welcome to vicJaq1337s next level e-store                     |");
-            System.out.println("|                                                                                    |");
-            System.out.println("|------------------------------------------------------------------------------------|");
-            System.out.println("|------------------------------------------------------------------------------------|");
-            System.out.println("|                                                                                    |");
-            System.out.println("|                        Select one of the following choices:                        |");
-            System.out.println("|        1. Apple                       2. Pear                        3. [hidden]   |");
-            System.out.println("|                                                                                    |");
-            System.out.println("|------------------------------------------------------------------------------------|");
-            produceBottom();
-          
-            Scanner scan = new Scanner(System.in);
-            int menuChoice = scan.nextInt();
-            switch(menuChoice) {
-                case 0: //avslutar den här sidan
-                    boolean areYouSure = areYouSure();
-                    if (areYouSure) {
-                        break;
-                    }
+        System.out.println("|------------------------------------------------------------------------------------|");
+        balanceShow(Wallet.bankBalance);
+        System.out.println("|                      Welcome to vicJaq1337s next level e-store                     |");
+        System.out.println("|                                                                                    |");
+        System.out.println("|------------------------------------------------------------------------------------|");
+        System.out.println("|------------------------------------------------------------------------------------|");
+        System.out.println("|                                                                                    |");
+        System.out.println("|                        Select one of the following choices:                        |");
+        System.out.println("|        1. Apple                       2. Pear                        3. [hidden]   |");
+        System.out.println("|                                                                                    |");
+        System.out.println("|------------------------------------------------------------------------------------|");
+        produceBottom();
+       
+        Scanner scan = new Scanner(System.in);
+        int menuChoice = scan.nextInt();
+        switch(menuChoice) {
+            case 0: //avslutar den här sidan
+                boolean areYouSure = areYouSure();
+                if (areYouSure) {
+                    break;
+                }
                 case 1:  // hämtar en funktion för att visa information om varan "Apple"
-                    productInfo(this.apple); 
+                    productInfoMassage(); 
                     break;
                     
                 case 2:  // hämtar en funktion för att visa information om varan "Pear"
-                    productInfo(this.pear);
+                    productInfoPear();
                     break;
                            
                 case 3: // Hade tänkt att använda en tredje vara men fick det inte att funka så lämna det så här
@@ -188,415 +178,120 @@ public class Menu {
                     break;
                    
                       
-                default: System.out.println("Enter a valid number");
+                default: tryAgainTxt();
             }
             
     } 
     
-
-
-    public void depositBank() {  //Funktion för sätta in pengar på sitt konto
-        boolean waitForInp = true; //Samma logik med att producera text som tidigare
-
-        while(waitForInp) { 
-            for (int i = 0; i < 50; ++i) {System.out.println();}
-            System.out.println("|------------------------------------------------------------------------------------|");
-            System.out.println("|                                                                                    |"); 
-            System.out.println("|                       Bank of vicJaq1337s next level e-store                       |");
-            walletShow(); // Hämtar hur mycket pengar användaren har i plånboken
-            System.out.println("|                                                                                    |");
-            System.out.println("|------------------------------------------------------------------------------------|");
-            System.out.println("|------------------------------------------------------------------------------------|");
-            System.out.println("|                                                                                    |");
-            System.out.println("|                            Its time for you to deposit!                            |");
-            System.out.println("|           Please enter the amount you would like to add to your balance            |");
-            System.out.println("|                                                                                    |");
-            System.out.println("|------------------------------------------------------------------------------------|");
-            System.out.println("|------------------------------------------------------------------------------------|");
-            System.out.println("|                                 Press 0 to go back                                 |");
-            System.out.println("|------------------------------------------------------------------------------------|");
-            Scanner scan = new Scanner(System.in);  //Scanner för att mata in belopp
-            int amt = scan.nextInt();   //Skannar efter belopp
-            boolean isSure = areYouSure();         //Validering för användaren 
-            if (amt == 0) {  //if statement som avbryter om använder matar in 0
-                waitForInp = false;
-            } else if (isSure) { //else if statement för att sätta in pengar 
-                if ((this.walletBalance) < amt) {
-                    tryAgainTxt();  //om man har för lite pengar i plånboken får man ett error meddelande
-                } else { 
-                    int tempWallet = amt;
-                    while (tempWallet > 0) { //while loop som säger att så länge det finns pengar kvar att sätta in så ska den fortsätta
-                        if (tempWallet >= 100) {  // så länge beloppet är högre än 100 ska 100-kr sedlar in
-                            for (Moneys i: wallet) {  // for each loop för att kolla igenom listan med pengar
-                             if (i.value == 100) {  // ser till att det är en 100-kr sedel som går in
-                                i.amt -= 1; // ändrar antalet i plånboken
-                                tempWallet -= 100;  //tar bort från det som ska matas in
-                                this.bankBalance += 100;  //tar in det som matas in
-                                System.out.println("");      // Skriver ut ett meddelande att den tagit emot pengarna                      
-                                System.out.println("|------------------------------------------------------------------------------------|");
-                                System.out.println("|                                                                                    |");
-                                produceRow("You have put in " + i.value + " SEK" + " ");
-                                System.out.println("|                                                                                    |");
-                                System.out.println("|------------------------------------------------------------------------------------|");
-                                TimeUnit.SECONDS.sleep(1);  //Stannar upp konsolen i 1 sekund så att användaren hinner se
-
-                            }                 
-                        }
-                        } else if (tempWallet >= 50 && tempWallet < 100) {  //samma princip som tidigare fast för 50kr sedlar
-                            for (Moneys i: wallet) {
-                                if (i.value == 50) {
-                                    i.amt -= 1;
-                                    tempWallet -= 50;
-                                    this.bankBalance += 50;
-                                    System.out.println("");
-                                    System.out.println("|------------------------------------------------------------------------------------|");
-                                    System.out.println("|                                                                                    |");
-                                    produceRow("You have put in " + i.value + " SEK");
-                                    System.out.println("|                                                                                    |");
-                                    System.out.println("|------------------------------------------------------------------------------------|");
-                                    TimeUnit.SECONDS.sleep(1);
-                                }                 
-                            }
-                        } else if (tempWallet >= 20 && tempWallet < 50) { // samma princip fast för 20kr sedlar
-                            for (Moneys i: wallet) {
-                                if (i.value == 20) {
-                                    i.amt -= 1;
-                                    tempWallet -= 20;
-                                    this.bankBalance += 20;
-                                    System.out.println("");
-                                    System.out.println("|------------------------------------------------------------------------------------|");
-                                    System.out.println("|                                                                                    |");
-                                    produceRow("You have put in " + i.value + " SEK");
-                                    System.out.println("|                                                                                    |");
-                                    System.out.println("|------------------------------------------------------------------------------------|");
-                                    TimeUnit.SECONDS.sleep(1);
-                                }
-                            }
-                        } else if (tempWallet >= 10 && tempWallet < 20) {  // samma princip fast för 10krs mynt
-                            for (Moneys i: wallet) {
-                                if (i.value == 10) {
-                                    i.amt -= 1;
-                                    tempWallet -= 10;
-                                    this.bankBalance += 10;
-                                    System.out.println("");
-                                    System.out.println("|------------------------------------------------------------------------------------|");
-                                    System.out.println("|                                                                                    |");
-                                    produceRow("You have put in " + i.value + " SEK");
-                                    System.out.println("|                                                                                    |");
-                                    System.out.println("|------------------------------------------------------------------------------------|");
-                                    TimeUnit.SECONDS.sleep(1);
-                                }                  
-                            }
-                        } else if (tempWallet >= 5 && tempWallet < 10) {  // Samma princip fast för 5krs mynt
-                            for (Moneys i: wallet) {
-                                if (i.value == 5) {
-                                    i.amt -= 1;
-                                    tempWallet -= 5;
-                                    this.bankBalance += 5;
-                                    System.out.println("");
-                                    System.out.println("|------------------------------------------------------------------------------------|");
-                                    System.out.println("|                                                                                    |");
-                                    produceRow("You have put in " + i.value + " SEK" + " ");
-                                    System.out.println("|                                                                                    |");
-                                    System.out.println("|------------------------------------------------------------------------------------|");
-                                    TimeUnit.SECONDS.sleep(1);
-
-                                }
-                            
-                            }
-                        } else if (tempWallet >=1 && tempWallet <5) {  //Samma princip fast för 1krs mynt
-                            for (Moneys i: wallet) {
-                                if (i.value == 1) {
-                                    i.amt -= 1;
-                                    tempWallet -= 1; 
-                                    this.bankBalance += 1;
-                                    System.out.println("");
-                                    System.out.println("|------------------------------------------------------------------------------------|");
-                                    System.out.println("|                                                                                    |");
-                                    produceRow("You have put in " + i.value + " SEK" + " ");
-                                    System.out.println("|                                                                                    |");
-                                    System.out.println("|------------------------------------------------------------------------------------|");
-                                    TimeUnit.SECONDS.sleep(1);
-                                    
-                                }
-                            }
-                        }
-                        
-                        
-                    }
-                TimeUnit.SECONDS.sleep(1); 
-                successTxt();   // funktion som visar att allt är klart 
-                walletBalance = 0;  //nollställer plånbokssaldos
-                wallet.forEach((Moneys i) -> {  //for each loop för att uppdatera saldot
-                walletBalance += (i.value * i.amt);  // värdet av kronan gånger antalet
-                        });
-                waitForInp = false; //Stänger ner menyn
-                    
-                }
-            }
-        }
-    }
-
-    public void withdrawalBank() { //Meny för att ta ut pengar.  Logiken är likadan som för att ta ut, vissa ändringar för att optimera samt ändrat på operatorer för att minska istället för att öka och tvärtom
-        boolean waitForInp = true; //Samma logik med att producera text som tidigare
-
-        while(waitForInp) { 
-            for (int i = 0; i < 50; ++i) {System.out.println();}
-            System.out.println("|------------------------------------------------------------------------------------|");
-            System.out.println("|                                                                                    |"); 
-            System.out.println("|                       Bank of vicJaq1337s next level e-store                       |");
-            balanceShow();
-            System.out.println("|                                                                                    |");
-            System.out.println("|------------------------------------------------------------------------------------|");
-            System.out.println("|------------------------------------------------------------------------------------|");
-            System.out.println("|                                                                                    |");
-            System.out.println("|                            Its time for you to deposit!                            |");
-            System.out.println("|           Please enter the amount you would like to add to your balance            |");
-            System.out.println("|                                                                                    |");
-            System.out.println("|------------------------------------------------------------------------------------|");
-            System.out.println("|------------------------------------------------------------------------------------|");
-            System.out.println("|                                 Press 0 to go back                                 |");
-            System.out.println("|------------------------------------------------------------------------------------|");
-            Scanner scan = new Scanner(System.in);  
-            int amt = scan.nextInt();   
-            boolean isSure = areYouSure();         
-            if (amt == 0) {  
-                waitForInp = false;
-            } else if (isSure) {  
-                if ((this.bankBalance) < amt) {
-                    tryAgainTxt();
-                } else {  
-                    while (bankBalance > 0) {
-                        if (amt >= 100) {
-                            for (Moneys i: wallet) {
-                             if (i.value == 100) {
-                                i.amt += 1;
-                                amt -= 100;
-                                this.bankBalance -= 100;
-                                System.out.println("");                            
-                                System.out.println("|------------------------------------------------------------------------------------|");
-                                System.out.println("|                                                                                    |");
-                                produceRow("You have recieved " + i.value + " SEK" + " ");
-                                System.out.println("|                                                                                    |");
-                                System.out.println("|------------------------------------------------------------------------------------|");
-                                TimeUnit.SECONDS.sleep(1);
-
-                            }                 
-                        }
-                        } else if (amt >= 50 && amt < 100) {
-                            for (Moneys i: wallet) {
-                                if (i.value == 50) {
-                                    i.amt -= 1;
-                                    amt -= 50;
-                                    this.bankBalance -= 50;
-                                    System.out.println("");
-                                    System.out.println("|------------------------------------------------------------------------------------|");
-                                    System.out.println("|                                                                                    |");
-                                    produceRow("You have recieved " + i.value + " SEK");
-                                    System.out.println("|                                                                                    |");
-                                    System.out.println("|------------------------------------------------------------------------------------|");
-                                    TimeUnit.SECONDS.sleep(1);
-                                }                 
-                            }
-                        } else if (amt >= 20 && amt < 50) {
-                            for (Moneys i: wallet) {
-                                if (i.value == 20) {
-                                    i.amt -= 1;
-                                    amt -= 20;
-                                    this.bankBalance -= 20;
-                                    System.out.println("");
-                                    System.out.println("|------------------------------------------------------------------------------------|");
-                                    System.out.println("|                                                                                    |");
-                                    produceRow("You have recieved " + i.value + " SEK");
-                                    System.out.println("|                                                                                    |");
-                                    System.out.println("|------------------------------------------------------------------------------------|");
-                                    TimeUnit.SECONDS.sleep(1);
-                                }
-                            }
-                        } else if (amt >= 10 && amt < 20) {
-                            for (Moneys i: wallet) {
-                                if (i.value == 10) {
-                                    i.amt -= 1;
-                                    amt -= 10;
-                                    this.bankBalance -= 10;
-                                    System.out.println("");
-                                    System.out.println("|------------------------------------------------------------------------------------|");
-                                    System.out.println("|                                                                                    |");
-                                    produceRow("You have recieved " + i.value + " SEK");
-                                    System.out.println("|                                                                                    |");
-                                    System.out.println("|------------------------------------------------------------------------------------|");
-                                    TimeUnit.SECONDS.sleep(1);
-                                }                  
-                            }
-                        } else if (amt >= 5 && amt < 10) {
-                            for (Moneys i: wallet) {
-                                if (i.value == 5) {
-                                    i.amt -= 1;
-                                    this.bankBalance += 5;
-                                    System.out.println("");
-                                    System.out.println("|------------------------------------------------------------------------------------|");
-                                    System.out.println("|                                                                                    |");
-                                    produceRow("You have recieved " + i.value + " SEK" + " ");
-                                    System.out.println("|                                                                                    |");
-                                    System.out.println("|------------------------------------------------------------------------------------|");
-                                    TimeUnit.SECONDS.sleep(1);
-
-                                }
-                            
-                            }
-                        } else if (amt >=1 && amt <5) {
-                            for (Moneys i: wallet) {
-                                if (i.value == 1) {
-                                    i.amt -= 1;
-                                    this.bankBalance += 1;
-                                    System.out.println("");
-                                    System.out.println("|------------------------------------------------------------------------------------|");
-                                    System.out.println("|                                                                                    |");
-                                    produceRow("You have recieved " + i.value + " SEK" + " ");
-                                    System.out.println("|                                                                                    |");
-                                    System.out.println("|------------------------------------------------------------------------------------|");
-                                    TimeUnit.SECONDS.sleep(1);
-                                    
-                                }
-                            }
-                        }
-                        
-                        
-                    }
-                TimeUnit.SECONDS.sleep(1);
-                successTxt();   
-                walletBalance = 0;
-                wallet.forEach((Moneys i) -> {
-                walletBalance += (i.value * i.amt);
-                        });
-                waitForInp = false;
-                    
-                }
-            }
-        }
-    }
-    
-    
-    public void withdrawalBankExit() {        //Samma logik som att ta ut fast den inte producerar någon menytext
-        while (bankBalance > 0) {
-            if (bankBalance >= 100) {
-                for (Moneys i: wallet) {
+    public static void withdrawalBankExit(Wallet wallet) throws InterruptedException {        //Samma logik som att ta ut fast den inte producerar någon menytext
+        int walletBalance = wallet.walletBalance;
+        int walletBalance = wallet.bankBalance;
+        while (wallet.bankBalance > 0) {
+            if (wallet.bankBalance >= 100) {
+                for (Moneys i: wallet.wallet) {
                     if (i.value == 100) {
                         i.amt += 1;
-                        this.bankBalance -= 100;
+                        wallet.bankBalance -= 100;
                         System.out.println("");                            
                         System.out.println("|------------------------------------------------------------------------------------|");
                         System.out.println("|                                                                                    |");
                         produceRow("You have recieved " + i.value + " SEK" + " ");
                         System.out.println("|                                                                                    |");
                         System.out.println("|------------------------------------------------------------------------------------|");
+                        walletBalance += 100;
                         TimeUnit.SECONDS.sleep(1);
                     }                 
                 }
-            } else if (bankBalance >= 50 && bankBalance < 100) {
-                for (Moneys i: wallet) {
+            } else if (wallet.bankBalance >= 50 && wallet.bankBalance < 100) {
+                for (Moneys i: wallet.wallet) {
                     if (i.value == 50) {
                         i.amt -= 1;
-                        this.bankBalance -= 50;
+                        wallet.bankBalance -= 50;
                         System.out.println("");
                         System.out.println("|------------------------------------------------------------------------------------|");
                         System.out.println("|                                                                                    |");
                         produceRow("You have recieved " + i.value + " SEK");
                         System.out.println("|                                                                                    |");
                         System.out.println("|------------------------------------------------------------------------------------|");
+                        walletBalance += 50;
                         TimeUnit.SECONDS.sleep(1);
                     }                 
                 }
-            } else if (bankBalance >= 20 && bankBalance < 50) {
-                for (Moneys i: wallet) {
+            } else if (wallet.bankBalance >= 20 && wallet.bankBalance < 50) {
+                for (Moneys i: wallet.wallet) {
                     if (i.value == 20) {
                         i.amt -= 1;
-                        this.bankBalance -= 20;
+                        wallet.bankBalance -= 20;
                         System.out.println("");
                         System.out.println("|------------------------------------------------------------------------------------|");
                         System.out.println("|                                                                                    |");
                         produceRow("You have recieved " + i.value + " SEK");
                         System.out.println("|                                                                                    |");
                         System.out.println("|------------------------------------------------------------------------------------|");
+                        walletBalance += 20;
                         TimeUnit.SECONDS.sleep(1);
                     }
                 }
-            } else if (bankBalance >= 10 && bankBalance < 20) {
-                for (Moneys i: wallet) {
+            } else if (wallet.bankBalance >= 10 && wallet.bankBalance < 20) {
+                for (Moneys i: wallet.wallet) {
                     if (i.value == 10) {
                         i.amt -= 1;
-                        this.bankBalance -= 10;
+                        wallet.bankBalance -= 10;
                         System.out.println("");
                         System.out.println("|------------------------------------------------------------------------------------|");
                         System.out.println("|                                                                                    |");
                         produceRow("You have recieved " + i.value + " SEK");
                         System.out.println("|                                                                                    |");
                         System.out.println("|------------------------------------------------------------------------------------|");
+                        walletBalance += 10;
                         TimeUnit.SECONDS.sleep(1);
                     }                  
                 }
             } else if (bankBalance >= 5 && bankBalance < 10) {
-                for (Moneys i: wallet) {
+                for (Moneys i: wallet.wallet) {
                     if (i.value == 5) {
                         i.amt -= 1;
-                        this.bankBalance += 5;
+                        bankBalance -= 5;
                         System.out.println("");
                         System.out.println("|------------------------------------------------------------------------------------|");
                         System.out.println("|                                                                                    |");
                         produceRow("You have recieved " + i.value + " SEK" + " ");
                         System.out.println("|                                                                                    |");
                         System.out.println("|------------------------------------------------------------------------------------|");
+                        walletBalance += 5;
                         TimeUnit.SECONDS.sleep(1);
                     }
                 }
             } else if (bankBalance >=1 && bankBalance <5) {
-                for (Moneys i: wallet) {
+                for (Moneys i: wallet.wallet) {
                     if (i.value == 1) {
                         i.amt -= 1;
-                        this.bankBalance += 1;
+                        bankBalance -= 1;
                         System.out.println("");
                         System.out.println("|------------------------------------------------------------------------------------|");
                         System.out.println("|                                                                                    |");
                         produceRow("You have recieved " + i.value + " SEK" + " ");
                         System.out.println("|                                                                                    |");
                         System.out.println("|------------------------------------------------------------------------------------|");
+                        walletBalance += 1;
                         TimeUnit.SECONDS.sleep(1);
                     }
                 }
             }
         }
-        walletBalance = 0;
-        wallet.forEach((Moneys i) -> {
-        walletBalance += (i.value * i.amt); });
+        
         for (int i = 0; i < 50; ++i) {System.out.println();}
         System.out.println("|------------------------------------------------------------------------------------|");
         System.out.println("|                                                                                    |");
-        produceRow(" You now have " + walletBalance + " SEK in your wallet  "+ " ");
+        produceRow(" You have now withdrawn " + walletBalance + " SEK in your wallet  "+ " ");
         produceRow("");
-        produceRow("See you next time!!!!" + " ")
+        produceRow("See you next time!!!!" + " ");
         System.out.println("|                                                                                    |");
         System.out.println("|------------------------------------------------------------------------------------|");
-    }
+    }    
         
-    
-    public void checkBalance() {
-        checkBalanceTxt();
-        boolean waitForInp = true;
-        Scanner scan = new Scanner(System.in);
-        int menuChoice = scan.nextInt();
-        while (waitForInp) {
-            int exit = menuChoice;        
-            if (exit == 0) {
-            waitForInp = false;
-            }
-        }
-    }
-    
-    
-    
-    
     //Textfiler
-    public boolean areYouSure() {    
+    public static boolean areYouSure() {    
         for (int i = 0; i < 50; ++i) System.out.println();
         System.out.println("|------------------------------------------------------------------------------------|");
         System.out.println("|                                                                                    |");
@@ -624,7 +319,7 @@ public class Menu {
     }  //Klar
      
 
-    public void successTxt() {
+    public static void successTxt() throws InterruptedException {
         for (int i = 0; i < 50; ++i) {System.out.println();}
         System.out.println("|------------------------------------------------------------------------------------|");
         System.out.println("|                                                                                    |"); //21 tabs 1 mellanslag
@@ -642,12 +337,10 @@ public class Menu {
         TimeUnit.SECONDS.sleep(3);
     }
 
-
-
-    public void balanceShow() {
+    public static void balanceShow(int bankBalance) {
         String printLine = "|                                                                                     |";
         int count = -2;
-        int balanceCount = String.valueOf("Balance: " + this.bankBalance).length();
+        int balanceCount = String.valueOf("Balance: " + bankBalance).length();
         String balance = "";
         
         for (int i = 0; i < printLine.length(); i++) {
@@ -658,7 +351,7 @@ public class Menu {
         for (int i = 0; i < ((count - balanceCount)/2); i++){
             balance += " ";
         }
-        balance += ("Balance: " + String.valueOf(this.bankBalance));
+        balance += ("Balance: " + String.valueOf(bankBalance));
         for (int i = 0; i < (count - balanceCount)/2; i++){
             balance += " ";
         }
@@ -666,10 +359,10 @@ public class Menu {
         System.out.println(balance);
     }
     
-    public void walletShow() {
+    public static void walletShow(int walletBalance) {
         String printLine = "|                                                                                     |";
         int count = -2;
-        int balanceCount = String.valueOf("You have : " + String.valueOf(this.walletBalance) + "SEK in your wallet!").length();
+        int balanceCount = String.valueOf("You have : " + String.valueOf(walletBalance) + "SEK in your wallet!").length();
         String balance = "";
         
         for (int i = 0; i < printLine.length(); i++) {
@@ -680,7 +373,7 @@ public class Menu {
         for (int i = 0; i < ((count - balanceCount)/2); i++){
             balance += " ";
         }
-        balance += ("You have : " + String.valueOf(this.walletBalance) + "SEK in your wallet!");
+        balance += ("You have : " + String.valueOf(walletBalance) + "SEK in your wallet!");
         for (int i = 0; i < (count - balanceCount)/2; i++){
             balance += " ";
         }
@@ -688,11 +381,11 @@ public class Menu {
         System.out.println(balance);
     }
 
-    public void checkBalanceTxt() {
+    public static void checkBalanceTxt(int bankBalance) {
         for (int i = 0; i < 50; ++i) {System.out.println();}
         String printLine = "|                                                                                    |";
         int count = -2;
-        int balanceCount = String.valueOf(this.bankBalance).length();
+        int balanceCount = String.valueOf(bankBalance).length();
         for (int i = 0; i < printLine.length(); i++) {
             count++;
         }
@@ -708,7 +401,7 @@ public class Menu {
         for (int i = 0; i < ((count - balanceCount)/2); i++){
             System.out.print(" ");
         }
-        System.out.print(this.bankBalance);
+        System.out.print(bankBalance);
         for (int i = 0; i < ((count - balanceCount)/2); i++){
             System.out.print(" ");
         }
@@ -720,7 +413,7 @@ public class Menu {
         System.out.println("|------------------------------------------------------------------------------------|");
     }
 
-    public void tryAgainTxt() {
+    public static void tryAgainTxt() throws InterruptedException {
         for (int i = 0; i < 50; ++i) {System.out.println();}
         System.out.println("|------------------------------------------------------------------------------------|");
         System.out.println("|                                                                                    |"); //21 tabs 1 mellanslag
@@ -738,8 +431,8 @@ public class Menu {
         TimeUnit.SECONDS.sleep(3);
     }
     
-    public void produceRow(String input) {
-        String printLine = "|                                                                                    |";
+    public static void produceRow(String input) {
+        String printLine = "|                                                                                     |";
         int count = -2;
         int stringCount =  String.valueOf(input).length();
                 
@@ -759,9 +452,7 @@ public class Menu {
         
     }
     
-    
-    
-    public void produceTop() {
+    public static void produceTop() {
 
         System.out.println("|------------------------------------------------------------------------------------|");
         System.out.println("|                                                                                    |");
@@ -773,7 +464,7 @@ public class Menu {
         
     }
     
-    public void produceBottom() {
+    public static void produceBottom() {
         System.out.println("|                                                                                    |");
         System.out.println("|------------------------------------------------------------------------------------|");
         System.out.println("|------------------------------------------------------------------------------------|");
@@ -784,61 +475,60 @@ public class Menu {
 
 
 
-    private void productInfo(Apple apple) {
-        
+    private static void productInfoMassage() throws InterruptedException {
+        Massage massage = new Massage();
         boolean waitForInp = true;
         while (waitForInp) {
-            Scanner scan = new Scanner(System.in)
+            Scanner scan = new Scanner(System.in);
             produceTop();
-            produceRow("Apple!");
-            for (Iterator<String> it = apple.descriptionString.iterator(); it.hasNext();) {
-                String e = it.next();
-                produceRow(e + " ");
-            }
-            produceRow("  Category: " + String.valueOf(apple.type));
-            produceRow(" Price: " + String.valueOf(apple.cost));
+            produceRow("Massage from a true master");
+            massage.descriptionString.forEach(e -> {
+            produceRow(e + " ");
+            });
+            produceRow("  Category: " + String.valueOf(massage.type) + " ");
+            produceRow(" Price: " + String.valueOf(massage.cost + " "));
             produceRow("  ");
             produceRow(" Press 1 to buy!");
             produceBottom(); 
-
         int menuChoice = scan.nextInt();
-        
-        if (menuChoice==0) {
-            boolean isSure = areYouSure();
-                if (isSure) {
-                    openShop();
+        switch(menuChoice) {
+            case 0:
+                if (areYouSure()) {
+                    waitForInp = false;
+                    break;
+                } else {
+                    
                 }
-        } else if (menuChoice==1) {
+            case 1: 
                 boolean checkSure = areYouSure();
                 if (checkSure) {
                 waitForInp = false;
-                if (bankBalance > apple.cost) {
-                bankBalance -= apple.cost;
+                if (this.bankBalance > massage.cost) {
+                this.bankBalance -= massage.cost;
                 produceTop();
-                produceRow("Buy Apple!");
-                for (Iterator<String> it = apple.buyString.iterator(); it.hasNext();) {
-                    String e = it.next();
-                    produceRow(e + " ");
-                }
-                produceRow("Press 1 to use now!");
+                produceRow("Welcome to my studio, dont mind the cameras");
+                massage.buyString.forEach(e -> {
+                    produceRow(e + "  ");
+                    });
+                produceRow("Press 1 to use now!" + " ");
                 produceBottom();
                 menuChoice = scan.nextInt();
                 if (menuChoice == 1) {
-                        produceTop();
-                        produceRow("Eat Apple!");
-                        for (Iterator<String> it = apple.useString.iterator(); it.hasNext();) {
-                            String e = it.next();
-                            produceRow(e + " ");
-                        }
+                        massage.useString.forEach(e -> {
+                            for (int i = 0; i < 50; ++i) {System.out.println();}
+                            produceTop();
+                            produceRow("Enjoy the massage");
+                            produceRow(e + "  ");
+                            produceBottom();
+                            TimeUnit.SECONDS.sleep(1);
+                        });
                         produceBottom();
                         TimeUnit.SECONDS.sleep(3);
-                        
+                        break;
                 } else if (menuChoice == 0) {
-                    openShop();
-                }
-                        
-                    
-                } else if (bankBalance < apple.cost) {
+                    break;
+                    }
+                } else if (bankBalance < massage.cost) {
                     for (int i = 0; i < 50; ++i) {System.out.println();}
                     produceTop();
                     produceRow("ERROR!!!");
@@ -850,92 +540,87 @@ public class Menu {
                     System.out.println("|                             Wait 3 seconds to return                               |");
                     System.out.println("|------------------------------------------------------------------------------------|");
                     TimeUnit.SECONDS.sleep(3);
-                    openShop();
+                    break;
                     
                 }
-                    }
+            }
+            default: System.out.println("Enter a valid number");
         }
     }
  }
     
- private void productInfo(Paron paron) {
-        
+    private static void productInfoPear() throws InterruptedException {
+        Paron paron = new Paron();
         boolean waitForInp = true;
         while (waitForInp) {
-            Scanner scan = new Scanner(System.in)
+            Scanner scan = new Scanner(System.in);
             produceTop();
             produceRow("Pear!");
-            for (Iterator<String> it = paron.descriptionString.iterator(); it.hasNext();) {
-                String e = it.next();
-                produceRow(e + " ");
-            }
-            produceRow("Category: " + String.valueOf(paron.type));
-            produceRow("Price: " + String.valueOf(paron.cost));
-            produceRow(" ");
-            produceRow("Press 1 to buy!");
+            paron.descriptionString.forEach(e -> {
+            produceRow(e + " ");
+            });
+            produceRow("  Category: " + String.valueOf(paron.type) + " ");
+            produceRow(" Price: " + String.valueOf(paron.cost + " "));
+            produceRow("  ");
+            produceRow(" Press 1 to buy!");
             produceBottom(); 
-
         int menuChoice = scan.nextInt();
-        
-        if (menuChoice==0) {
-            boolean isSure = areYouSure();
-                if (isSure) {
-                    openShop();
+        switch(menuChoice) {
+            case 0:
+                if (areYouSure()) {
+                    waitForInp = false;
+                    break;
+                } else {
+                    
                 }
-        } else if (menuChoice==1) {
-                boolean isSure = areYouSure();
-                if (isSure) {
+            case 1: 
+                boolean checkSure = areYouSure();
+                if (checkSure) {
                 waitForInp = false;
-                if (bankBalance > paron.cost) {
-                bankBalance -= paron.cost;
+                if (this.bankBalance > paron.cost) {
+                this.bankBalance -= paron.cost;
                 produceTop();
                 produceRow("Buy a Pear!");
-                for (Iterator<String> it = paron.buyString.iterator(); it.hasNext();) {
-                    String e = it.next();
+                paron.buyString.forEach(e -> {
                     produceRow(e + " ");
-                }
+                    });
                 produceRow("Press 1 to use now!");
                 produceBottom();
                 menuChoice = scan.nextInt();
                 if (menuChoice == 1) {
                         produceTop();
-                        produceRow("Eat your Pear!");
-                        for (Iterator<String> it = paron.useString.iterator(); it.hasNext();) {
-                            String e = it.next();
+                        produceRow("Eat your god damn Pear");
+                        paron.useString.forEach(e -> {
                             produceRow(e + " ");
-                        }
+                        });
                         produceBottom();
                         TimeUnit.SECONDS.sleep(3);
-                        
+                        break;
                 } else if (menuChoice == 0) {
-                    openShop();
-                }
-                        
-                    
+                    break;
+                    }
                 } else if (bankBalance < paron.cost) {
                     for (int i = 0; i < 50; ++i) {System.out.println();}
                     produceTop();
                     produceRow("ERROR!!!");
                     produceRow("");
-                    produceRow("You don't have enough money");
+                    produceRow("You don't have enough money ");
                     System.out.println("|                                                                                    |");
                     System.out.println("|------------------------------------------------------------------------------------|");
                     System.out.println("|------------------------------------------------------------------------------------|");
                     System.out.println("|                             Wait 3 seconds to return                               |");
                     System.out.println("|------------------------------------------------------------------------------------|");
                     TimeUnit.SECONDS.sleep(3);
-                    openShop();
+                    break;
                     
                 }
-                    }
+            }
+            default: System.out.println("Enter a valid number");
+            }
         }
     }
- }
-
-
-
 }
-
+    
 
 
 

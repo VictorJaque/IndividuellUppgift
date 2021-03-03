@@ -9,7 +9,7 @@ package individuelluppgift;
  *
  * @author Victor Jaque <victor.jaque.mte21lin@tucsweden.se>
  */
-public class Moneys extends Money {
+public class Moneys extends Money {  //Extendar den abstrakta klassen så att man kan tilldela hur många av varje peng man vill ha
     //Attribut
     public int amt;
     
@@ -19,7 +19,7 @@ public class Moneys extends Money {
         this.amt = amt;
     }
     
-    //Metoder
+    //Metoder för att göra pengar i alla svenska valörer upp till 100kr
     public static Moneys createOnes(int amt) {
         Moneys ones = new Moneys(1, amt);
         return ones;
