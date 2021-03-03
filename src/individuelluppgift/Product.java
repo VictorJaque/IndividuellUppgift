@@ -11,13 +11,15 @@ package individuelluppgift;
  */
 abstract class Product {
     //attribut
-    public String name;
-    public int cost;
-    //Konstruktor
-    public Product(String name, int cost) {
-        this.name = name;
-        this.cost = cost;
-    }
+    String name;
+    int cost;
+    String type;
     
+    abstract void Product();
+    
+
+}
+
+
     
 }
