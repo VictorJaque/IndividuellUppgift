@@ -25,11 +25,13 @@ public class Menu {
     public ArrayList<Moneys> wallet;    //Arraylist för min klass Moneys (derived från Money)
     public Paron pear;      //Min första produkt
     public Apple apple;     //Min andra produkt
-
+    public Wallet walletUser;
     //Konstruktor
     public Menu() {  //När jag initierar objektet vill jag att den ska vara tom på pengar
-        wallet = new ArrayList<>();
-        walletBalance = 0;
+        walletUser = new Wallet();
+        walletUser.fillWallet(10);  //fyller på användarens plånbok med 10 av varje valör enligt uppgiftsbeskrivningen
+        wallet = walletUser.wallet;
+        this.walletBalance = walletUser.walletBalance;
         bankBalance = 0;
         pear = new Paron();
         apple = new Apple();
@@ -38,7 +40,6 @@ public class Menu {
     public static void main(String[] args) {
         // TODO code application logic here   
         Menu menu = new Menu();
-        menu.fillWallet(10);  //fyller på min plånbok med 10 av varje valör
         menu.startMenu();   //Startar användarmenyn
         
 
@@ -221,27 +222,27 @@ public class Menu {
                 waitForInp = false;
             } else if (isSure) { //else if statement för att sätta in pengar 
                 if ((this.walletBalance) < amt) {
-                    tryAgainTxt();
+                    tryAgainTxt();  //om man har för lite pengar i plånboken får man ett error meddelande
                 } else { 
                     int tempWallet = amt;
-                    while (tempWallet > 0) {
-                        if (tempWallet >= 100) {
-                            for (Moneys i: wallet) {
-                             if (i.value == 100) {
-                                i.amt -= 1;
-                                tempWallet -= 100;
-                                this.bankBalance += 100;
-                                System.out.println("");                            
+                    while (tempWallet > 0) { //while loop som säger att så länge det finns pengar kvar att sätta in så ska den fortsätta
+                        if (tempWallet >= 100) {  // så länge beloppet är högre än 100 ska 100-kr sedlar in
+                            for (Moneys i: wallet) {  // for each loop för att kolla igenom listan med pengar
+                             if (i.value == 100) {  // ser till att det är en 100-kr sedel som går in
+                                i.amt -= 1; // ändrar antalet i plånboken
+                                tempWallet -= 100;  //tar bort från det som ska matas in
+                                this.bankBalance += 100;  //tar in det som matas in
+                                System.out.println("");      // Skriver ut ett meddelande att den tagit emot pengarna                      
                                 System.out.println("|------------------------------------------------------------------------------------|");
                                 System.out.println("|                                                                                    |");
                                 produceRow("You have put in " + i.value + " SEK" + " ");
                                 System.out.println("|                                                                                    |");
                                 System.out.println("|------------------------------------------------------------------------------------|");
-                                TimeUnit.SECONDS.sleep(1);
+                                TimeUnit.SECONDS.sleep(1);  //Stannar upp konsolen i 1 sekund så att användaren hinner se
 
                             }                 
                         }
-                        } else if (tempWallet >= 50 && tempWallet < 100) {
+                        } else if (tempWallet >= 50 && tempWallet < 100) {  //samma princip som tidigare fast för 50kr sedlar
                             for (Moneys i: wallet) {
                                 if (i.value == 50) {
                                     i.amt -= 1;
@@ -256,7 +257,7 @@ public class Menu {
                                     TimeUnit.SECONDS.sleep(1);
                                 }                 
                             }
-                        } else if (tempWallet >= 20 && tempWallet < 50) {
+                        } else if (tempWallet >= 20 && tempWallet < 50) { // samma princip fast för 20kr sedlar
                             for (Moneys i: wallet) {
                                 if (i.value == 20) {
                                     i.amt -= 1;
@@ -271,7 +272,7 @@ public class Menu {
                                     TimeUnit.SECONDS.sleep(1);
                                 }
                             }
-                        } else if (tempWallet >= 10 && tempWallet < 20) {
+                        } else if (tempWallet >= 10 && tempWallet < 20) {  // samma princip fast för 10krs mynt
                             for (Moneys i: wallet) {
                                 if (i.value == 10) {
                                     i.amt -= 1;
@@ -286,7 +287,7 @@ public class Menu {
                                     TimeUnit.SECONDS.sleep(1);
                                 }                  
                             }
-                        } else if (tempWallet >= 5 && tempWallet < 10) {
+                        } else if (tempWallet >= 5 && tempWallet < 10) {  // Samma princip fast för 5krs mynt
                             for (Moneys i: wallet) {
                                 if (i.value == 5) {
                                     i.amt -= 1;
@@ -303,7 +304,7 @@ public class Menu {
                                 }
                             
                             }
-                        } else if (tempWallet >=1 && tempWallet <5) {
+                        } else if (tempWallet >=1 && tempWallet <5) {  //Samma princip fast för 1krs mynt
                             for (Moneys i: wallet) {
                                 if (i.value == 1) {
                                     i.amt -= 1;
@@ -323,21 +324,21 @@ public class Menu {
                         
                         
                     }
-                TimeUnit.SECONDS.sleep(1);
-                successTxt();   
-                walletBalance = 0;
-                wallet.forEach((Moneys i) -> {
-                walletBalance += (i.value * i.amt);
+                TimeUnit.SECONDS.sleep(1); 
+                successTxt();   // funktion som visar att allt är klart 
+                walletBalance = 0;  //nollställer plånbokssaldos
+                wallet.forEach((Moneys i) -> {  //for each loop för att uppdatera saldot
+                walletBalance += (i.value * i.amt);  // värdet av kronan gånger antalet
                         });
-                waitForInp = false;
+                waitForInp = false; //Stänger ner menyn
                     
                 }
             }
         }
     }
 
-    public void withdrawalBank() {
-                boolean waitForInp = true; //Samma logik med att producera text som tidigare
+    public void withdrawalBank() { //Meny för att ta ut pengar.  Logiken är likadan som för att ta ut, vissa ändringar för att optimera samt ändrat på operatorer för att minska istället för att öka och tvärtom
+        boolean waitForInp = true; //Samma logik med att producera text som tidigare
 
         while(waitForInp) { 
             for (int i = 0; i < 50; ++i) {System.out.println();}
@@ -356,15 +357,15 @@ public class Menu {
             System.out.println("|------------------------------------------------------------------------------------|");
             System.out.println("|                                 Press 0 to go back                                 |");
             System.out.println("|------------------------------------------------------------------------------------|");
-            Scanner scan = new Scanner(System.in);  //Scanner för att mata in belopp
-            int amt = scan.nextInt();   //Skannar efter belopp
-            boolean isSure = areYouSure();         //Validering för användaren 
-            if (amt == 0) {  //if statement som avbryter om använder matar in 0
+            Scanner scan = new Scanner(System.in);  
+            int amt = scan.nextInt();   
+            boolean isSure = areYouSure();         
+            if (amt == 0) {  
                 waitForInp = false;
-            } else if (isSure) { //else if statement för att sätta in pengar 
+            } else if (isSure) {  
                 if ((this.bankBalance) < amt) {
                     tryAgainTxt();
-                } else { //else if statement för att sätta in pengar 
+                } else {  
                     while (bankBalance > 0) {
                         if (amt >= 100) {
                             for (Moneys i: wallet) {
@@ -476,7 +477,7 @@ public class Menu {
     }
     
     
-    public void withdrawalBankExit() {        
+    public void withdrawalBankExit() {        //Samma logik som att ta ut fast den inte producerar någon menytext
         while (bankBalance > 0) {
             if (bankBalance >= 100) {
                 for (Moneys i: wallet) {
@@ -592,24 +593,6 @@ public class Menu {
     }
     
     
-    public void fillWallet(int amt) {
-        Moneys ones = new Moneys(1, amt);
-        this.wallet.add(ones);
-        Moneys fives = new Moneys(5, amt);
-        this.wallet.add(fives);
-        Moneys tens = new Moneys(10, amt);
-        this.wallet.add(tens);
-        Moneys twentys = new Moneys(20, amt);
-        this.wallet.add(twentys);
-        Moneys fiftys = new Moneys(50, amt);
-        this.wallet.add(fiftys);
-        Moneys hundreds = new Moneys(100, amt);
-        this.wallet.add(hundreds);
-        walletBalance = 0;
-        this.wallet.forEach((Moneys i) -> {
-        walletBalance += (i.value * i.amt);
-        });
-    } //Klar, Bara kommentera
     
     
     //Textfiler
