@@ -13,16 +13,19 @@ import java.util.ArrayList;
  */
 public final class Massage extends Product implements ProductInterface {
     //Attribut
-    public ArrayList<String> descriptionString;
-    public static ArrayList<String> buyString;
-    public static ArrayList<String> useString;
+    String name;
+    private static ArrayList<String> descriptionString;
+    private static ArrayList<String> buyString;
+    private static ArrayList<String> useString;
+    private Wallet wallet;
     
     
     //Konstruktor
-    public Massage() extends Wallet {
+    public Massage() {
+        super();
         name = "Massage";
-        cost = 100;
-        type = "Service";
+        setCost(100);
+        setType("Service");
         descriptionString = new ArrayList<>(); 
         buyString = new ArrayList<>();
         useString = new ArrayList<>();
@@ -35,43 +38,87 @@ public final class Massage extends Product implements ProductInterface {
     
     @Override
     public void Description() {
-        descriptionString.add("Have you ever dreamt about a nice hour with an AI? ");
-        descriptionString.add(" ");
-        descriptionString.add("Well, here I am, i am also quite cheap ;)");
+        getDescriptionString().add("Have you ever dreamt about a nice hour with an AI? ");
+        getDescriptionString().add(" ");
+        getDescriptionString().add("Well, here I am, i am also quite cheap ;)");
     }
 
     @Override
     public void Buy() {
-        buyString.add(" Congratulations to a new experience ");
+        getBuyString().add(" Congratulations to a new experience ");
         
     }
     
 
     @Override
     public void Use() {
-        useString.add("LETS GOOOOO!!!!!!");
-        useString.add(" ");
-        useString.add(". ");
-        useString.add(". ");
-        useString.add("Dont expect a happy ending you perv");
+        getUseString().add("LETS GOOOOO!!!!!!");
+        getUseString().add(" ");
+        getUseString().add(". ");
+        getUseString().add(". ");
+        getUseString().add("Dont expect a happy ending you perv");
+    }
+
+    @Override
+    void Product() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    /**
+     * @return the descriptionString
+     */
+    public static ArrayList<String> getDescriptionString() {
+        return descriptionString;
+    }
+
+    /**
+     * @param aDescriptionString the descriptionString to set
+     */
+    public static void setDescriptionString(ArrayList<String> aDescriptionString) {
+        descriptionString = aDescriptionString;
+    }
+
+    /**
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * @return the buyString
+     */
+    public static ArrayList<String> getBuyString() {
+        return buyString;
+    }
+
+    /**
+     * @param aBuyString the buyString to set
+     */
+    public static void setBuyString(ArrayList<String> aBuyString) {
+        buyString = aBuyString;
+    }
+
+    /**
+     * @return the useString
+     */
+    public static ArrayList<String> getUseString() {
+        return useString;
+    }
+
+    /**
+     * @param aUseString the useString to set
+     */
+    public static void setUseString(ArrayList<String> aUseString) {
+        useString = aUseString;
     }
 
     
 }
-
-
-/*        
-
-    @Override
-    public void Buy() {
-        buyString.add("Congratulations to a new experience");
-        
-    }
-
-    @Override
-    public void Use() {
-        useString.add("LETS GOOOOO!!!!!!");
-        useString.add("");
-        useString.add(". ");
-        useString.add(". ");
-        useString.add("Dont expect a happy ending you perv");*/

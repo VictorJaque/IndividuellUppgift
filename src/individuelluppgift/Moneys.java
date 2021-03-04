@@ -11,7 +11,7 @@ package individuelluppgift;
  */
 public class Moneys extends Money {  //Extendar den abstrakta klassen så att man kan tilldela hur många av varje peng man vill ha
     //Attribut
-    public int amt;
+    private int amt;
     
     //Konstruktor
     public Moneys(int value, int amt) {
@@ -48,6 +48,20 @@ public class Moneys extends Money {  //Extendar den abstrakta klassen så att ma
     public static Moneys createHundreds(int amt) {
        Moneys hundreds = new Moneys(100, amt);
        return hundreds;
+    }
+
+    /**
+     * @return the amt
+     */
+    public int getAmt() {
+        return amt;
+    }
+
+    /**
+     * @param amt the amt to set
+     */
+    public void setAmt(int amt) {
+        this.amt = amt;
     }
 
 }

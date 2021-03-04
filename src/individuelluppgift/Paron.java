@@ -12,15 +12,17 @@ import java.util.ArrayList;
  */
 public class Paron extends Product implements ProductInterface {
     //Attribut
-    public ArrayList<String> descriptionString;
-    public static ArrayList<String> buyString;
-    public static ArrayList<String> useString;
+    final String name;
+    private ArrayList<String> descriptionString;
+    private static ArrayList<String> buyString;
+    private static ArrayList<String> useString;
     
     //Konstruktor
     public Paron() {
+        super();
         name = "Pear";
-        cost = 7;
-        type = "Food";
+        setCost(7);
+        setType("Food");
         descriptionString = new ArrayList<>(); 
         buyString = new ArrayList<>();
         useString = new ArrayList<>();
@@ -32,21 +34,54 @@ public class Paron extends Product implements ProductInterface {
 
     @Override
     public void Description() {
-        descriptionString.add("A wierd-looking edible. Some may call it sandy");
-        descriptionString.add("and others might even eat it with its sticker on");
+        getDescriptionString().add("A wierd-looking edible. Some may call it sandy");
+        getDescriptionString().add("and others might even eat it with its sticker on");
     }
 
     @Override
     public void Buy() {
-        buyString.add("Congratulations to your new Pear");
+        getBuyString().add("Congratulations to your new Pear");
     }
     
 
     @Override
     public void Use() {
-        useString.add("'Have you never had an pear before????' - Mac");
-        useString.add("");
-        useString.add("Well.. Now I have!");
+        getUseString().add("'Have you never had an pear before????' - Mac");
+        getUseString().add("");
+        getUseString().add("Well.. Now I have!");
+    }
+
+    @Override
+    void Product() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    /**
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @return the descriptionString
+     */
+    public ArrayList<String> getDescriptionString() {
+        return descriptionString;
+    }
+
+    /**
+     * @return the buyString
+     */
+    public static ArrayList<String> getBuyString() {
+        return buyString;
+    }
+
+    /**
+     * @return the useString
+     */
+    public static ArrayList<String> getUseString() {
+        return useString;
     }
 
     
