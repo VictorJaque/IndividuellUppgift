@@ -101,7 +101,7 @@ public class Menu extends Wallet{
         while(waitForInp) {
             clearScreen();
             produceBankTop();
-            produceRow("Select one of the following choices:");
+            produceRow("Select one of the following choices: ");
             produceRow("1. Deposit money to current account                          ");
             produceRow("2. Withdrawal money from vicJaq1337s next level e-store      ");
             produceRow("3. Check Balance                                             ");
@@ -131,42 +131,53 @@ public class Menu extends Wallet{
     public static void openShop(Wallet userWallet) throws InterruptedException {  //Startsida för affären. Samma logik här som tidigare startsidor
         clearScreen();
         produceTop();
-        System.out.println("|                        Select one of the following choices:                        |");
-        produceRow("1. Massage")
+        produceRow("Select one of the following choices:");
+        produceRow("1. Massage");
         produceRow("2. Pear");
         produceRow("");
-        System.out.println("|-------------------------------------------------------------------------------------|");
         produceBottom();
        
         Scanner scan = new Scanner(System.in);
         int menuChoice = scan.nextInt();
-        switch(menuChoice) {
-            case 0: //avslutar den här sidan
-                boolean areYouSure = areYouSure();
-                if (areYouSure) {
-                    break;
-                }
+        boolean waitForInput = true;
+        while (waitForInput)
+            switch(menuChoice) {
+                case 0: //avslutar den här sidan
+                    boolean areYouSure = areYouSure();
+                    if (areYouSure) {
+                        waitForInput = false;
+                    }
                 case 1:  // hämtar en funktion för att visa information om varan "Apple"
-                    productInfoMassage(); 
-                    break;
-                    
+                    Massage menuMassage = new Massage();
+                    menuMassage.Description();
+                    int secondChoice = scan.nextInt();
+                    if (secondChoice == 1) {
+                        produceTop();
+                        menuMassage.Buy();
+                        produceBottom();
+                        TimeUnit.SECONDS.sleep(1);
+                        produceTop();
+                        menuMassage.Use();
+                        produceBottom();
+                        break;
+                    }                    
                 case 2:  // hämtar en funktion för att visa information om varan "Pear"
-                    productInfoPear();
-                    break;
-                           
-                case 3: // Hade tänkt att använda en tredje vara men fick det inte att funka så lämna det så här
-                    produceTop();  // hämtar en funktion för att producera överdelen av meddelanden
-                    produceRow("Exclusive area! "); //hämtar en funktion för att producera en del av meddelandet med text
-                    produceRow("");
-                    produceRow("Come back when you have the fame that you need! ");
-                    produceBottom(); // hämtar en funktion för att producera nedre delen av meddelandet
-                    TimeUnit.SECONDS.sleep(3);  // stannar konsolen i 3 sekunder innan den kommer tillbaka
-                    break;
-                   
-                      
+                    Paron menuPear = new Paron();
+                    menuPear.Description();
+                    menuChoice = scan.nextInt();
+                    if (menuChoice == 1) {
+                        produceTop();
+                        menuPear.Buy();
+                        produceBottom();
+                        TimeUnit.SECONDS.sleep(1);
+                        produceTop();
+                        menuPear.Use();
+                        produceBottom();
+                    }
+
                 default: tryAgainTxt();
-            }
-            
+        
+        }    
     } 
     
     public static void withdrawalBankExit() throws InterruptedException {        //GÖR OM
@@ -502,153 +513,7 @@ public class Menu extends Wallet{
 
 
     @SuppressWarnings("fallthrough")
-    private static void productInfoMassage() throws InterruptedException {
-        boolean waitForInp = true;
-        while (waitForInp) {
-            Scanner scan = new Scanner(System.in);
-            produceTop();
-            produceRow("Massage from a true master");
-            for(String e: massage.getDescriptionString()) {
-                produceRow(e);
-            }
-
-            produceRow("Category: " + String.valueOf(massage.type));
-            produceRow("Price: " + String.valueOf(massage.cost));
-            produceRow("  ");
-            produceRow(" Press 1 to buy!");
-            produceBottom(); 
-            int menuChoice = scan.nextInt();
-            switch(menuChoice) {
-                case 0:
-                    if (areYouSure()) {
-                        waitForInp = false;
-                        break;
-                    }
-                case 1: 
-                    boolean checkSure = areYouSure();
-                    if (checkSure) {
-                    waitForInp = false;
-                    if (bankBalance > massage.getCost()) {
-                        setBankBalance(bankBalance - massage.cost);
-                        produceTop();
-                        produceRow("Welcome to my studio, dont mind the cameras");
-                        massage.getBuyString().forEach(e -> {
-                            produceRow(e);
-                        });
-                        produceRow("Press 1 to use now!");
-                        produceBottom();
-                        menuChoice = scan.nextInt();
-                        if (menuChoice == 1) {
-                            getMassage().getUseString().forEach((String e) -> {
-                                for (int i = 0; i < 50; ++i) {System.out.println();}
-                                produceTop();
-                                produceRow("Enjoy the massage");
-                                produceRow(e);
-                                produceBottom();
-                                try {
-                                    TimeUnit.SECONDS.sleep(1);
-                                } catch (InterruptedException ex) {
-                                    Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
-                                }
-                            });
-                            produceBottom();
-                            TimeUnit.SECONDS.sleep(3);
-                            break;
-                        } else if (menuChoice == 0) {
-                            break;
-                        }
-                    } else {
-                        if (getBankBalance() < getMassage().getCost()) {
-                            for (int i = 0; i < 50; ++i) {System.out.println();}
-                            produceTop();
-                            produceRow("ERROR!!!");
-                            produceRow("");
-                            produceRow("You don't have enough money ");
-                            produceRow("");
-                            produceLine();
-                            produceRow("Wait 3 seconds to return");
-                            produceLine();
-                            TimeUnit.SECONDS.sleep(3);
-                            break;
-                            
-                        }
-                    }
-                }
-                default: System.out.println("Enter a valid number");
-            }
-        }
-    }
-    
-    @SuppressWarnings("fallthrough")
-    private static void productInfoPear() throws InterruptedException {
-        boolean waitForInp = true;
-        while (waitForInp) {
-            Scanner scan = new Scanner(System.in);
-            produceTop();
-            produceRow("Pear!");
-            getPear().getDescriptionString().forEach(e -> {
-            produceRow(e + " ");
-            });
-            produceRow("  Category: " + String.valueOf(pear.type) );
-            produceRow(" Price: " + String.valueOf(pear.cost));
-            produceRow("  ");
-            produceRow(" Press 1 to buy!");
-            produceBottom(); 
-        int menuChoice = scan.nextInt();
-        switch(menuChoice) {
-            case 0:
-                if (areYouSure()) {
-                    waitForInp = false;
-                    break;
-                } else {
-                    
-                }
-            case 1: 
-                boolean checkSure = areYouSure();
-                if (checkSure) {
-                waitForInp = false;
-                if (bankBalance > pear.getCost()) {
-                    setBankBalance(bankBalance - pear.cost);
-                produceTop();
-                produceRow("Buy a Pear!");
-                        getPear().getBuyString().forEach(e -> {
-                    produceRow(e + " ");
-                    });
-                produceRow("Press 1 to use now!");
-                produceBottom();
-                menuChoice = scan.nextInt();
-                if (menuChoice == 1) {
-                        produceTop();
-                        produceRow("Eat your god damn Pear");
-                            pear.getUseString().forEach((String e) -> {
-                            produceRow(e + " ");
-                        });
-                        produceBottom();
-                        TimeUnit.SECONDS.sleep(3);
-                        break;
-                } else if (menuChoice == 0) {
-                    break;
-                    }
-                } else if (bankBalance < pear.getCost()) {
-                    for (int i = 0; i < 50; ++i) {System.out.println();}
-                    produceTop();
-                    produceRow("ERROR!!!");
-                    produceRow("");
-                    produceRow("You don't have enough money ");
-                    produceRow("");
-                    produceRow("Wait 3 seconds to return");
-                    produceRow("");
-                    produceLine();
-                    TimeUnit.SECONDS.sleep(3);
-                    break;
-                    
-                }
-            }
-            default: System.out.println("Enter a valid number");
-            }
-        }
-    }
-
+   
     /**
      * @return the bankBalance
      */
