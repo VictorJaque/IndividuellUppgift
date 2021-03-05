@@ -5,8 +5,7 @@
  */
 package individuelluppgift;
 
-import static individuelluppgift.Menu.produceBottom;
-import static individuelluppgift.Menu.produceRow;
+import static individuelluppgift.Menu.clearScreen;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
@@ -14,22 +13,21 @@ import java.util.concurrent.TimeUnit;
  *
  * @author Victor Jaque <victor.jaque.mte21lin@tucsweden.se>
  */
-public final class Massage extends Product implements ProductInterface {
-    //Attribut
+public class Car extends Product implements ProductInterface {
     private String name;
-    
-    //Konstruktor
-    public Massage(int value, String type, int bankBalance) {
+    public static int bankBalance;
+
+    public Car(int value, String type, int bankBalance) {
         super(value, type);
         this.bankBalance = bankBalance;
-        name = "Massage";
+        name = "Car";
     }
-    
-    /**
-     *
-     * @param userWallet
-     * @throws InterruptedException
-     */
+
+
+    @Override
+    void Product() {
+    }
+
     @Override
     public void Description() throws InterruptedException {
         clearScreen();
@@ -38,9 +36,9 @@ public final class Massage extends Product implements ProductInterface {
         produceRow(name);
         produceRow("");
         Menu.walletShow(bankBalance);
-        produceRow("Have you ever dreamt about a nice hour with an AI? ");
+        produceRow("Do you want to buy a cheap used car in a vending machine? ");
         produceRow(" ");
-        produceRow("Well, here I am, i am also quite cheap ;)");
+        produceRow("I can't garuantee that it is totally safe tho!");
         produceRow("");
         produceRow("Cost: " + String.valueOf(value));
         produceRow("Press 1 to buy!");
@@ -57,72 +55,46 @@ public final class Massage extends Product implements ProductInterface {
     }
 
     @Override
-    public void Buy() throws InterruptedException{
+    public void Buy() throws InterruptedException {
         if (bankBalance >= value) {
             bankBalance -= value;
             Menu.clearScreen();
             Menu.produceLine();
             Menu.produceRow("");
-            Menu.produceRow(" Congratulations to a new experience ");
+            Menu.produceRow(" Congratulations to a new ride");
             Menu.produceRow("");
             Menu.produceLine();
             TimeUnit.SECONDS.sleep(1);
             Use();
         } else {Menu.tryAgainTxt();}
     }
-    
 
     @Override
     public void Use() throws InterruptedException {
         Menu.clearScreen();
         Menu.produceLine();
         Menu.produceRow("");
-        Menu.produceRow("LETS GOOOOO!!!!!!");
+        Menu.produceRow("Jump IN!!");
         Menu.produceRow(" ");
         Menu.produceLine();
         TimeUnit.SECONDS.sleep(1);
         Menu.clearScreen();
         Menu.produceLine();
-        Menu.produceRow("");
-        Menu.produceRow("LETS GOOOOO!!!!!!");
+        Menu.produceRow("Jump IN!!");
         Menu.produceRow(". ");
         Menu.produceLine();
         TimeUnit.SECONDS.sleep(1);
         Menu.clearScreen();
         Menu.produceLine();
-        Menu.produceRow("");
-        Menu.produceRow("LETS GOOOOO!!!!!!");
         Menu.produceRow(". . ");
         Menu.produceLine();
         TimeUnit.SECONDS.sleep(1);
         Menu.clearScreen();
         Menu.produceLine();
-        Menu.produceRow("");
-        Menu.produceRow("LETS GOOOOO!!!!!!");
-        Menu.produceRow(". . ");
-        Menu.produceRow("Dont expect a happy ending you perv");
+        Menu.produceRow("Jump IN!!");
+        Menu.produceRow("VROOOOOOOOOOM!!!!");
         Menu.produceLine();
         TimeUnit.SECONDS.sleep(2);
 
     }
-
-    @Override
-    void Product() {
-    }
-
-    /**
-     * @return the name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * @param name the name to set
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
 }
-

@@ -4,9 +4,7 @@
  * and open the template in the editor.
  */
 package individuelluppgift;
-
-import static individuelluppgift.Menu.produceBottom;
-import static individuelluppgift.Menu.produceRow;
+import static individuelluppgift.Menu.clearScreen;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
@@ -14,33 +12,29 @@ import java.util.concurrent.TimeUnit;
  *
  * @author Victor Jaque <victor.jaque.mte21lin@tucsweden.se>
  */
-public final class Massage extends Product implements ProductInterface {
+public class Pear extends Product implements ProductInterface {
     //Attribut
-    private String name;
+    final String name;
+    public static int bankBalance;
     
     //Konstruktor
-    public Massage(int value, String type, int bankBalance) {
+    public Pear(int value, String type, int bankBalance) {
         super(value, type);
         this.bankBalance = bankBalance;
-        name = "Massage";
+        name = "Pear";
     }
-    
-    /**
-     *
-     * @param userWallet
-     * @throws InterruptedException
-     */
+
     @Override
-    public void Description() throws InterruptedException {
+     public void Description() throws InterruptedException {
         clearScreen();
         produceLine();
         produceRow("");
         produceRow(name);
         produceRow("");
-        Menu.walletShow(bankBalance);
-        produceRow("Have you ever dreamt about a nice hour with an AI? ");
+        produceRow("A wierd-looking edible. Some may call it sandy");
         produceRow(" ");
-        produceRow("Well, here I am, i am also quite cheap ;)");
+        produceRow("and others might even eat it with its sticker on");
+        produceRow("Looking at you Charlie Kelly!!");
         produceRow("");
         produceRow("Cost: " + String.valueOf(value));
         produceRow("Press 1 to buy!");
@@ -56,6 +50,7 @@ public final class Massage extends Product implements ProductInterface {
         }
     }
 
+    
     @Override
     public void Buy() throws InterruptedException{
         if (bankBalance >= value) {
@@ -63,51 +58,24 @@ public final class Massage extends Product implements ProductInterface {
             Menu.clearScreen();
             Menu.produceLine();
             Menu.produceRow("");
-            Menu.produceRow(" Congratulations to a new experience ");
+            Menu.produceRow(" Congratulations to your new Pear");
             Menu.produceRow("");
             Menu.produceLine();
             TimeUnit.SECONDS.sleep(1);
             Use();
         } else {Menu.tryAgainTxt();}
     }
-    
 
     @Override
     public void Use() throws InterruptedException {
         Menu.clearScreen();
         Menu.produceLine();
         Menu.produceRow("");
-        Menu.produceRow("LETS GOOOOO!!!!!!");
-        Menu.produceRow(" ");
-        Menu.produceLine();
-        TimeUnit.SECONDS.sleep(1);
-        Menu.clearScreen();
-        Menu.produceLine();
+        Menu.produceRow("'Have you never had an pear before????' - Mac");
         Menu.produceRow("");
-        Menu.produceRow("LETS GOOOOO!!!!!!");
-        Menu.produceRow(". ");
-        Menu.produceLine();
-        TimeUnit.SECONDS.sleep(1);
-        Menu.clearScreen();
-        Menu.produceLine();
-        Menu.produceRow("");
-        Menu.produceRow("LETS GOOOOO!!!!!!");
-        Menu.produceRow(". . ");
-        Menu.produceLine();
-        TimeUnit.SECONDS.sleep(1);
-        Menu.clearScreen();
-        Menu.produceLine();
-        Menu.produceRow("");
-        Menu.produceRow("LETS GOOOOO!!!!!!");
-        Menu.produceRow(". . ");
-        Menu.produceRow("Dont expect a happy ending you perv");
+        Menu.produceRow("Well.. Now I have!");
         Menu.produceLine();
         TimeUnit.SECONDS.sleep(2);
-
-    }
-
-    @Override
-    void Product() {
     }
 
     /**
@@ -117,12 +85,9 @@ public final class Massage extends Product implements ProductInterface {
         return name;
     }
 
-    /**
-     * @param name the name to set
-     */
-    public void setName(String name) {
-        this.name = name;
+    @Override
+    void Product() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
 }
 

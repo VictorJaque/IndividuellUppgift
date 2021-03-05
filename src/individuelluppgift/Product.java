@@ -11,28 +11,14 @@ package individuelluppgift;
  */
 abstract class Product extends Menu {
     //attribut
-    public static int cost;
-    static String type;
+    private static String type;
 
-    public Product() {
-        super(wallet);
+    public Product(int value, String type) {
+        super(value);
+        this.type = type;
     }
     
     abstract void Product();
-
-    /**
-     * @return the cost
-     */
-    public int getCost() {
-        return cost;
-    }
-
-    /**
-     * @param cost the cost to set
-     */
-    public void setCost(int cost) {
-        this.cost = cost;
-    }
 
     /**
      * @return the type

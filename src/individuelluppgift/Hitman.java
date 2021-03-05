@@ -5,8 +5,7 @@
  */
 package individuelluppgift;
 
-import static individuelluppgift.Menu.produceBottom;
-import static individuelluppgift.Menu.produceRow;
+import static individuelluppgift.Menu.clearScreen;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
@@ -14,22 +13,18 @@ import java.util.concurrent.TimeUnit;
  *
  * @author Victor Jaque <victor.jaque.mte21lin@tucsweden.se>
  */
-public final class Massage extends Product implements ProductInterface {
-    //Attribut
-    private String name;
-    
-    //Konstruktor
-    public Massage(int value, String type, int bankBalance) {
+public class Hitman extends Product implements ProductInterface  {
+    private final String name;
+
+    public Hitman(int value, String type, int bankBalance) {
         super(value, type);
         this.bankBalance = bankBalance;
-        name = "Massage";
+        name = "Hitman";
     }
     
-    /**
-     *
-     * @param userWallet
-     * @throws InterruptedException
-     */
+    //Konstruktor
+
+
     @Override
     public void Description() throws InterruptedException {
         clearScreen();
@@ -38,9 +33,9 @@ public final class Massage extends Product implements ProductInterface {
         produceRow(name);
         produceRow("");
         Menu.walletShow(bankBalance);
-        produceRow("Have you ever dreamt about a nice hour with an AI? ");
+        produceRow("Do you feel so much hate towards somebody that you want to kill them?");
         produceRow(" ");
-        produceRow("Well, here I am, i am also quite cheap ;)");
+        produceRow("Let a pro do the job");
         produceRow("");
         produceRow("Cost: " + String.valueOf(value));
         produceRow("Press 1 to buy!");
@@ -57,7 +52,7 @@ public final class Massage extends Product implements ProductInterface {
     }
 
     @Override
-    public void Buy() throws InterruptedException{
+    public void Buy() throws InterruptedException {
         if (bankBalance >= value) {
             bankBalance -= value;
             Menu.clearScreen();
@@ -70,59 +65,20 @@ public final class Massage extends Product implements ProductInterface {
             Use();
         } else {Menu.tryAgainTxt();}
     }
-    
-
     @Override
     public void Use() throws InterruptedException {
         Menu.clearScreen();
         Menu.produceLine();
         Menu.produceRow("");
-        Menu.produceRow("LETS GOOOOO!!!!!!");
-        Menu.produceRow(" ");
-        Menu.produceLine();
-        TimeUnit.SECONDS.sleep(1);
-        Menu.clearScreen();
-        Menu.produceLine();
+        Menu.produceRow("Time to kill someone!!");
         Menu.produceRow("");
-        Menu.produceRow("LETS GOOOOO!!!!!!");
-        Menu.produceRow(". ");
-        Menu.produceLine();
-        TimeUnit.SECONDS.sleep(1);
-        Menu.clearScreen();
-        Menu.produceLine();
-        Menu.produceRow("");
-        Menu.produceRow("LETS GOOOOO!!!!!!");
-        Menu.produceRow(". . ");
-        Menu.produceLine();
-        TimeUnit.SECONDS.sleep(1);
-        Menu.clearScreen();
-        Menu.produceLine();
-        Menu.produceRow("");
-        Menu.produceRow("LETS GOOOOO!!!!!!");
-        Menu.produceRow(". . ");
-        Menu.produceRow("Dont expect a happy ending you perv");
         Menu.produceLine();
         TimeUnit.SECONDS.sleep(2);
-
     }
 
     @Override
     void Product() {
-    }
-
-    /**
-     * @return the name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * @param name the name to set
-     */
-    public void setName(String name) {
-        this.name = name;
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }
-

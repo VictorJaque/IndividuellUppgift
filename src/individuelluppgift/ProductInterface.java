@@ -10,8 +10,8 @@ package individuelluppgift;
  * @author Victor Jaque <victor.jaque.mte21lin@tucsweden.se>
  */
 public interface ProductInterface {
-    void Description();
-    void Buy();
-    void Use();
+    void Description() throws InterruptedException;
+    void Buy() throws InterruptedException;
+    void Use() throws InterruptedException;
     
 }
