@@ -17,9 +17,15 @@ import java.util.logging.Logger;
  * @author Victor Jaque <victor.jaque.mte21lin@tucsweden.se>
  */
 public class Menu extends Wallet{
-
-  
+    //Konstruktor 
+    //används aldrig men måste väl vara med?
+    public Menu(int value) {
+        super(value);
+    }
     
+    
+    //Min main metod som skapar en plånbok. adderar 10 av varje valör och som 
+    //används för att starta menyn!
     public static void main(String[] args) throws InterruptedException {
         // TODO code application logic here   
         Wallet userWallet = new Wallet(0);
@@ -28,9 +34,9 @@ public class Menu extends Wallet{
     }    
         
         
-
+    // Första sidan av menyn där man kan välja om man vill handla produkter eller gå in på "banken"
     @SuppressWarnings("fallthrough")
-    public static void startMenu(Wallet userWallet) throws InterruptedException {       // Första sidan av menyn där man kan välja om man vill handla produkter eller sätta in pengar i automaten
+    public static void startMenu(Wallet userWallet) throws InterruptedException {       
         boolean startMenu = true;   //använder en lokal boolean i en while loop som producerar ny text efter varje input från användaren ifall den inte skulle mata in rätt
         Scanner scan = new Scanner(System.in);  //Initierar en scanner för att användaren ska kunna mata in sitt val
         while (startMenu) {
@@ -58,7 +64,7 @@ public class Menu extends Wallet{
                 case 0:
                     boolean areYouSure = areYouSure(); //Funktion som frågar användaren om deen är säker
                     if (areYouSure) {
-                        //Avslutar programmet
+                        //Avslutar programmet och tar ut återstående pengar
                         startMenu = false;
                         userWallet.withdrawalBankExit();
                         break;
@@ -77,13 +83,13 @@ public class Menu extends Wallet{
                         openShop(userWallet);
                         break;
                     }
-                    
+                    //Felmeddelande vid felaktikg inmatning
                 default: tryAgainTxt();
                 }
             }  
         } 
     
-    public static Wallet openBank(Wallet userWallet) throws InterruptedException {  //Startsida för banken. Samma logik här som tidigar
+    public static Wallet openBank(Wallet userWallet) throws InterruptedException {  //Startsida för banken. Samma logik här startMenu(userWallet)
         boolean waitForInp = true; 
         while(waitForInp) {
             clearScreen();
@@ -128,7 +134,7 @@ public class Menu extends Wallet{
             produceRow("1. Massage   ");
             produceRow("2. Pear      ");
             produceRow("3. Car       ");
-            produceRow("");
+            produceRow("4. [HIDDEN]  ");
             produceBottom();
        
             Scanner scan = new Scanner(System.in);
@@ -142,21 +148,28 @@ public class Menu extends Wallet{
                         break;
                     }
                 case 1: 
+                    //Startar en ny instans av Massage som ger användaren erbjudande att köpa 
                     Massage itemMassage = new Massage(100, "Service", userWallet.getBankBalance());
                     itemMassage.Description();
                     userWallet.setBankBalance(itemMassage.getBankBalance());
                     break;
-                case 2: //Tar ut pengar
-                    //Pear itemPear = new Pear(7, "Food");
-                    //itemPear.Description();
+                case 2: 
+                    //Startar en ny instans av Pear som ger användaren erbjudande att köpa 
+                    Pear itemPear = new Pear(7, "Food", userWallet.getBankBalance());
+                    itemPear.Description();
+                    userWallet.setBankBalance(itemPear.getBankBalance());
                     break;
                 case 3: 
-                    //Car itemCar = new Car(500, "Vehicle");
-                    //itemCar.Description();
+                    //Startar en ny instans av Car som ger användaren erbjudande att köpa 
+                    Car itemCar = new Car(500, "Vehicle", userWallet.getBankBalance());
+                    itemCar.Description();
+                    userWallet.setBankBalance(itemCar.getBankBalance());
                     break;
                 case 4:
-                    //Hitman itemHitman = new Hitman(10000, "Service");
-                    //itemHitman.Description();
+                    //Startar en ny instans av Hitman som ger användaren erbjudande att köpa
+                    Hitman itemHitman = new Hitman(10000, "Service", userWallet.getBankBalance());
+                    itemHitman.Description();
+                    userWallet.setBankBalance(itemHitman.getBankBalance());
                 default: tryAgainTxt();
             }
         }
@@ -164,8 +177,11 @@ public class Menu extends Wallet{
      
     
        
-        
-    //Textfiler
+    /* Nedan följer endast metoder för att skapa olika outputs
+    de flesta använder sig av simpla System.out metoder.
+    De metoder som har parameter använder sig av olika ekvationer */
+    
+    //Textmetod som validerar användarens svar. Returnerar en Boolean på sant eller falskti
     public static boolean areYouSure() throws InterruptedException {    
         clearScreen();
         System.out.println("|-------------------------------------------------------------------------------------|");
@@ -195,13 +211,13 @@ public class Menu extends Wallet{
             default : tryAgainTxt();
         }
         return isSure;
-    }  //Klar
-     
-
+    }  //Textfil som validerar användarens svar. Returnerar en Boolean på sant eller falskti
+    
+    //Textmetod för när man har lyckat sätta in/ta ut pengar
     public static void successTxt() throws InterruptedException {
         clearScreen();
         System.out.println("|--------------------------------------------------------------------------------------|");
-        System.out.println("|                                                                                      |"); //21 tabs 1 mellanslag
+        System.out.println("|                                                                                      |");
         System.out.println("|                              vicJaq1337s next level e-store                          |");
         System.out.println("|                                                                                      |");
         System.out.println("|--------------------------------------------------------------------------------------|");
@@ -212,31 +228,32 @@ public class Menu extends Wallet{
         System.out.println("|                                  Wait 2 seconds to exit                              |");
         System.out.println("|--------------------------------------------------------------------------------------|");
         TimeUnit.SECONDS.sleep(2);
-    }
-
+    }  
+    
+    //Textmetod för att skriva ut vad man har på sitt saldo
     public static void balanceShow(int bankBalance) {
-        String printLine = "|                                                                                     |";
-        int count = -2;
-        int balanceCount = String.valueOf("Balance: " + bankBalance).length();
-        String balance = "";
+        String printLine = "|                                                                                     |"; //tar in hur lång en rad ska vara
+        int count = -2;  // lokal integer som ska räkna ut hur många tecken en rad behöver utan "|" - därav minus 2
+        int balanceCount = String.valueOf("Balance: " + bankBalance).length();  //konverterar längden på önskad utskrift till siffror
+        String balance = "";  //string variabel som i slutändan kommer vara det som skrivs ut
         
-        for (int i = 0; i < printLine.length(); i++) {
+        for (int i = 0; i < printLine.length(); i++) {  // för loop för att räkna ut längden på prinLine.
             count++;
         }
         
-        balance += "|";
-        for (int i = 0; i < ((count - balanceCount)/2); i++){
-            balance += " ";
+        balance += "|";   //Lägger till start-symbolen
+        for (int i = 0; i < ((count - balanceCount)/2); i++){ //sen en For-loop som körs lika många gånger som hälften av count-balanceCount 
+            balance += " ";  //för varje gång den körs printar den ut ett mellanslag
         }
-        balance += ("Balance: " + String.valueOf(bankBalance));
-        if (balanceCount %2 == 0) {
+        balance += ("Balance: " + String.valueOf(bankBalance));  //sen printar den ut det som ska stå
+        if (balanceCount %2 == 0) {  //if sats som ser till att de blir rätt antal mellanslag beroende på om det är jämt delbart med 2 eller inte.
             for (int i = 0; i < (count - balanceCount)/2; i++){
                 balance += " ";
             }
             balance += "|";
             System.out.println(balance);
         } else {
-            for (int i = -1; i < (count - balanceCount)/2; i++){
+            for (int i = -1; i < (count - balanceCount)/2; i++){ //ifall det inte är jämt delbart ska den skriva ut ett extra mellanslag
                 balance += " ";
             }
             balance += "|";
@@ -244,8 +261,8 @@ public class Menu extends Wallet{
         }  
         
     }
-
     
+    //Textmetod för att skriva ut vad man har i plånboken. Logiken är likadan som balanceShow(bankBalance)
     public static void walletShow(int walletBalance) {
         String printLine = "|                                                                                     |";
         int count = -2;
@@ -268,6 +285,7 @@ public class Menu extends Wallet{
         System.out.println(balance);
     }
 
+    //Textmetod för att kolla sitt saldo i bankmenyn.
     public static void checkBalanceTxt(int bankBalance) {
         clearScreen();
         String printLine = "|                                                                                    |";
@@ -300,6 +318,7 @@ public class Menu extends Wallet{
         System.out.println("|------------------------------------------------------------------------------------|");
     }
 
+    //Textmetod för när man har misslyckats sätta in/ta ut pengar.
     public static void tryAgainTxt() throws InterruptedException {
         clearScreen();
         System.out.println("|--------------------------------------------------------------------------------------|");
@@ -316,15 +335,19 @@ public class Menu extends Wallet{
         TimeUnit.SECONDS.sleep(2);
     }
     
+    //Textmetod för att skapa en linje i konsolen 
     public static void produceLine() {
         System.out.println("|--------------------------------------------------------------------------------------|");
     }
     
+    //Parameteren tar in vad som ska skrivas
+    //Samma logik som i balanceShow(bankBalance) fast man använder sig av en String istället för Int
     public static void produceRow(String input) {
+        //Lokala variabler
         String printLine;
         printLine = "|--------------------------------------------------------------------------------------|";
         int count = -2;
-        int stringCount =  String.valueOf(input).length();
+        int stringCount =  String.valueOf(input).length(); 
                 
         for (int i = 0; i < printLine.length(); i++) {
             count++;
@@ -349,10 +372,12 @@ public class Menu extends Wallet{
         
     }
     
+    // Metod för att rensa konsolen
     public static void clearScreen() {   // Metod för att rensa loggen
-        for (int i = 0 ; i < 50; i++) {System.out.println("");}   
+        for (int i = 0 ; i < 50; i++) {System.out.println("");} //For-Loop som skriver ut 50 tomma rader  
    }
     
+    //Textmetod för att producera "headern" i shoppen
     public static void produceTop(Wallet userWallet) {
         clearScreen();
         produceLine();
@@ -362,7 +387,7 @@ public class Menu extends Wallet{
         walletShow(Wallet.getBankBalance());
         produceLine();
     }
-    
+    //Textmetod för att producera "headern" i banken.
     public static void produceBankTop() {
         clearScreen();
         produceLine();
@@ -373,6 +398,7 @@ public class Menu extends Wallet{
         produceRow("");
     }
     
+    //Textmetod för att producera sidfoten i konsolen när användaren kan trycka 0 för att gå tillbaka
     public static void produceBottom() {
         produceRow("");
         produceLine();
@@ -380,6 +406,7 @@ public class Menu extends Wallet{
         produceLine();
     }
     
+    //Textfil för metoden att sätta in pengar i klassen Wallet
     public static void depositBankText() {
         clearScreen();
         System.out.println("|------------------------------------------------------------------------------------|");
@@ -399,7 +426,7 @@ public class Menu extends Wallet{
         System.out.println("|------------------------------------------------------------------------------------|");
 
     }
-    
+    //Textfil för metoden att ta ut pengar i klassen Wallet
     public static void withdrawalBankText(){
         clearScreen();
         produceLine();
@@ -413,7 +440,7 @@ public class Menu extends Wallet{
         produceRow("Please enter the amount you would like to remove from your account");
         produceBottom();
     }
-    
+    //Textfil för att användaren ska se vad den sätter in
     public static void depositText(int i) {
         produceLine();
         produceRow("");
@@ -421,7 +448,7 @@ public class Menu extends Wallet{
         produceRow("");
         produceLine();
     }
-    
+    //Textfil för att användaren ska se vad den tar ut
     public static void withdrawalText(int i) {
         produceLine();
         produceRow("");
@@ -430,9 +457,7 @@ public class Menu extends Wallet{
         produceLine();
     }
 
-    public Menu(int value) {
-        super(value);
-    }
+   
 }
     
 

@@ -12,12 +12,12 @@ import java.util.ArrayList;
  * @author Victor Jaque <victor.jaque.mte21lin@tucsweden.se>
  */
 abstract class MoneyValue { //Abstract klass för pengar som bara initierar värdet av en peng
-    //Attribut där jag anger värdet för varje valör samt hur många
+    //Attribut där jag anger värdet för varje valör
     int value;
 
     
     
-    //Konstruktor
+    //Konstruktor för att ta fram en "Peng" i en viss valör
     public MoneyValue(int value) {
         this.value = value;
     }

@@ -10,16 +10,17 @@ package individuelluppgift;
  * @author Victor Jaque <victor.jaque.mte21lin@tucsweden.se>
  */
 public class Money extends MoneyValue {  //Extendar den abstrakta klassen så att man kan tilldela hur många av varje peng man vill ha
-    //Attribut
+    //Attribut för Money
     private int amt;
     
-    //Konstruktor
+    //Konstruktor där jag klassen ärver Value från MoneyValue
     public Money(int value) {
         super(value);
         this.amt = 1;
     }
     
     //Metoder för att göra pengar i alla svenska valörer upp till 100kr
+    //parameterna tar in antalet man vill göra av varje valör.
     public static Money createOnes(int amt) {
         Money ones = new Money(1);
         ones.setAmt(ones.getAmt() * amt);

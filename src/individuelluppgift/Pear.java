@@ -13,17 +13,17 @@ import java.util.concurrent.TimeUnit;
  * @author Victor Jaque <victor.jaque.mte21lin@tucsweden.se>
  */
 public class Pear extends Product implements ProductInterface {
-    //Attribut
+    //Attribut som inte ärvs
     final String name;
-    public static int bankBalance;
     
-    //Konstruktor
+    //Konstruktor som ärver från aden abstrakta klassen samt tilldelar nya värden
     public Pear(int value, String type, int bankBalance) {
         super(value, type);
         this.bankBalance = bankBalance;
         name = "Pear";
     }
-
+    //Metod för att visa vad produkten innehåller
+    //Ger användaren ett alternativ att handla produkten
     @Override
      public void Description() throws InterruptedException {
         clearScreen();
@@ -50,7 +50,8 @@ public class Pear extends Product implements ProductInterface {
         }
     }
 
-    
+    //Metod som kollar att man har tillräckligt mycket med pengar på sitt saldo
+    //så man inte ger ut saker gratis... hur skulle det se ut?
     @Override
     public void Buy() throws InterruptedException{
         if (bankBalance >= value) {
@@ -65,7 +66,8 @@ public class Pear extends Product implements ProductInterface {
             Use();
         } else {Menu.tryAgainTxt();}
     }
-
+    
+    //Sista metod för att använda den. Går igång automatiskt när köpet är genomförrt
     @Override
     public void Use() throws InterruptedException {
         Menu.clearScreen();
@@ -78,16 +80,5 @@ public class Pear extends Product implements ProductInterface {
         TimeUnit.SECONDS.sleep(2);
     }
 
-    /**
-     * @return the name
-     */
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    void Product() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 }
 

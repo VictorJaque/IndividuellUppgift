@@ -10,16 +10,17 @@ package individuelluppgift;
  * @author Victor Jaque <victor.jaque.mte21lin@tucsweden.se>
  */
 abstract class Product extends Menu {
-    //attribut
+    //Attribut som alla andra klasser ska ärva från 
+    //Jag har valt att ärva från min klass Menu då det är den som ska 
+    //hantera produkterna 
     private static String type;
-
+    
+    //Konstruktor med Value och Type som parameters 
     public Product(int value, String type) {
         super(value);
         this.type = type;
     }
     
-    abstract void Product();
-
     /**
      * @return the type
      */

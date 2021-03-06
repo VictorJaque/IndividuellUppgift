@@ -14,20 +14,20 @@ import java.util.concurrent.TimeUnit;
  * @author Victor Jaque <victor.jaque.mte21lin@tucsweden.se>
  */
 public class Car extends Product implements ProductInterface {
+    //Attribut som inte ärvs
     private String name;
-    public static int bankBalance;
 
+    //Konstruktor som ärver från aden abstrakta klassen samt tilldelar nya värden
     public Car(int value, String type, int bankBalance) {
-        super(value, type);
+        super(value, type);  
         this.bankBalance = bankBalance;
         name = "Car";
     }
 
 
-    @Override
-    void Product() {
-    }
 
+    //Metod för att visa vad produkten innehåller
+    //Ger användaren ett alternativ att handla produkten
     @Override
     public void Description() throws InterruptedException {
         clearScreen();
@@ -53,7 +53,9 @@ public class Car extends Product implements ProductInterface {
 
         }
     }
-
+    
+    //Metod som kollar att man har tillräckligt mycket med pengar på sitt saldo
+    //så man inte ger ut saker gratis... hur skulle det se ut?
     @Override
     public void Buy() throws InterruptedException {
         if (bankBalance >= value) {
@@ -69,6 +71,7 @@ public class Car extends Product implements ProductInterface {
         } else {Menu.tryAgainTxt();}
     }
 
+    //Sista metod för att använda den. Går igång automatiskt när köpet är genomförrt
     @Override
     public void Use() throws InterruptedException {
         Menu.clearScreen();

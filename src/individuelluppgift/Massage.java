@@ -15,21 +15,18 @@ import java.util.concurrent.TimeUnit;
  * @author Victor Jaque <victor.jaque.mte21lin@tucsweden.se>
  */
 public final class Massage extends Product implements ProductInterface {
-    //Attribut
+    //Attribut som inte ärvs
     private String name;
     
-    //Konstruktor
+    //Konstruktor som ärver från aden abstrakta klassen samt tilldelar nya värden
     public Massage(int value, String type, int bankBalance) {
         super(value, type);
         this.bankBalance = bankBalance;
         name = "Massage";
     }
     
-    /**
-     *
-     * @param userWallet
-     * @throws InterruptedException
-     */
+    //Metod för att visa vad produkten innehåller
+    //Ger användaren ett alternativ att handla produkten
     @Override
     public void Description() throws InterruptedException {
         clearScreen();
@@ -55,7 +52,9 @@ public final class Massage extends Product implements ProductInterface {
 
         }
     }
-
+    
+    //Metod som kollar att man har tillräckligt mycket med pengar på sitt saldo
+    //så man inte ger ut saker gratis... hur skulle det se ut?
     @Override
     public void Buy() throws InterruptedException{
         if (bankBalance >= value) {
@@ -71,7 +70,7 @@ public final class Massage extends Product implements ProductInterface {
         } else {Menu.tryAgainTxt();}
     }
     
-
+    //Sista metod för att använda den. Går igång automatiskt när köpet är genomförrt
     @Override
     public void Use() throws InterruptedException {
         Menu.clearScreen();
@@ -105,24 +104,5 @@ public final class Massage extends Product implements ProductInterface {
         TimeUnit.SECONDS.sleep(2);
 
     }
-
-    @Override
-    void Product() {
-    }
-
-    /**
-     * @return the name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * @param name the name to set
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
 }
 
